@@ -16,11 +16,11 @@ export const getTasks = () => {
     return _tasks || [];
 };
 
-export const getTaskById = id => {
+export const getTaskById = (id: number) => {
     return _tasks.find(a => a.id === id) || [];
 };
 
-export const createTask = param => {
+export const createTask = (param: ITask) => {
     const data = {
         id: _tasks.length || 0,
         title: param.title,
@@ -29,4 +29,17 @@ export const createTask = param => {
 
     _tasks.push(data);
     return data;
+};
+
+export const updateTaskById = (id: number, param: ITask) => {
+    const index = _tasks.findIndex(a => a.id === id);
+    
+    const self = _tasks[index];
+    _tasks[index] = {
+        id: self.id,
+        title: param.title || self.title,
+        is_done: param.is_done || self.is_done
+    }
+
+    return _tasks[index];
 };

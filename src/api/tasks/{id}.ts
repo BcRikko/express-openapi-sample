@@ -34,3 +34,44 @@ get.apiDoc = {
         }
     }
 };
+
+export const put: Operation = (req, res) => {
+    const task = store.updateTaskById(req.params.id, req.body);
+    res.status(200).json(task);
+};
+
+put.apiDoc = {
+    summary: '指定IDタスクの更新',
+    description: 'パスに指定されたIDのタスクを更新します',
+    operationId: 'updateTaskById',
+    parameters: [
+        {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'integer',
+            format: 'int32'
+        },
+        {
+            name: 'task',
+            in: 'body',
+            schema: {
+                $ref: '#/definitions/TaskOne'
+            }
+        }
+    ],
+    responses: {
+        200: {
+            description: 'タスクを更新しました',
+            schema: {
+                $ref: '#/definitions/TaskOne'
+            }
+        },
+        default: {
+            description: '予期しないエラー',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
+        }
+    }
+};

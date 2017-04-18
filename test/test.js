@@ -67,3 +67,20 @@ describe('POST /tasks', () => {
             .end(done);
     });
 });
+
+describe('PUT /tasks/{id}', () => {
+    it('タスクを更新できるか？', done => {
+        agent
+            .put('tasks/0')
+            .send({
+                title: 'updated',
+                is_done: true
+            })
+            .expect(200)
+            .expect(res => {
+                expect(res.body.title).to.be.eq('updated');
+                expect(res.body.is_done).to.be.true;
+            })
+            .end(done);
+    });
+});
