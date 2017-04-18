@@ -1,0 +1,140 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: Todo Application API
+
+paths:
+  /tasks:
+    get:
+      summary: タスク一覧の取得
+      description: |
+        タスク一覧を取得します
+      operationId: 'getTaskList'
+      responses:
+        200:
+          description: タスク一覧を取得しました
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/TaskList'
+        default:
+          description: '予期しないエラー'
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: タスクの登録
+      description: |
+        タスクを登録します
+      operationId: 'createTask'
+      parameters:
+        -
+          name: 'task'
+          in: 'body'
+          schema:
+            $ref: '#/definitions/TaskOne'
+      responses:
+        201:
+          description: タスクを登録しました
+          schema:
+            $ref: '#/definitions/TaskOne'
+        default:
+          description: '予期しないエラー'
+          schema:
+            $ref: '#/definitions/Error'
+  /tasks/{id}:
+    get:
+      summary: 指定IDタスクの取得
+      description: |
+        パスに指定されたIDのタスクを取得します
+      parameters:
+        -
+          name: 'id'
+          in: 'path'
+          required: true
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: タスクを取得しました
+          schema:
+            $ref: '#/definitions/TaskOne'
+        default:
+          description: '予期しないエラー'
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: 指定IDタスクの更新
+      description: |
+        パスに指定されたIDのタスクを更新します
+      parameters:
+        -
+          name: 'id'
+          in: 'path'
+          required: true
+          type: integer
+          format: int32
+        -
+          name: 'task'
+          in: 'body'
+          schema:
+            $ref: '#/definitions/TaskOne'
+      responses:
+        200:
+          description: タスクを更新しました
+          schema:
+            $ref: '#/definitions/TaskOne'
+        default:
+          description: '予期しないエラー'
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: 指定IDタスクの削除
+      description: |
+        パスに指定されたIDのタスクを削除します
+      parameters:
+        -
+          name: 'id'
+          in: 'path'
+          required: true
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: タスクを削除しました
+        default:
+          description: '予期しないエラー'
+          schema:
+            $ref: '#/definitions/Error'
+      
+definitions:
+  Error:
+    type: 'object'
+    readOnly: true
+    properties:
+      code:
+        description: HTTPステータスコード
+        type: integer
+        format: int32
+      message:
+        description: エラーメッセージ
+        type: string
+  TaskList:
+    type: 'array'
+    items:
+      $ref: '#/definitions/TaskOne'
+  TaskOne:
+    type: 'object'
+    properties:
+      id:
+        description: タスクのID
+        type: integer
+        format: int32
+      title:
+        description: タスクの名前
+        type: string
+      is_done:
+        description: タスクの状態
+        default: false
+        type: boolean
+    

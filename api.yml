@@ -1,0 +1,37 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: Todo Application API
+paths: {}
+definitions:
+  Error:
+    type: 'object'
+    readOnly: true
+    properties:
+      code:
+        description: HTTPステータスコード
+        type: integer
+        format: int32
+      message:
+        description: エラーメッセージ
+        type: string
+  TaskList:
+    type: 'array'
+    items:
+      $ref: '#/definitions/TaskOne'
+  TaskOne:
+    type: 'object'
+    properties:
+      id:
+        description: タスクのID
+        type: integer
+        format: int32
+      title:
+        description: タスクの名前
+        type: string
+      is_done:
+        description: タスクの状態
+        default: false
+        type: boolean
+    

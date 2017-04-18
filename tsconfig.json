@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "removeComments": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true
+  }
+}
