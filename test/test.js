@@ -39,3 +39,31 @@ describe('GET /tasks/{id}', () => {
             .end(done);
     });
 });
+
+describe('POST /tasks', () => {
+    let id = 0;
+    it('タスクが登録できるか？', done => {
+        agent
+            .post('tasks')
+            .send({
+                title: 'test'
+            })
+            .expect(201)
+            .expect(res => {
+                expect(res.body.title).to.be.eq('test');
+                expect(res.body.is_done).to.be.false;
+                id = res.body.id;
+            })
+            .end(done);
+    });
+
+    it('登録したタスクが取得できるか？', done => {
+        agent
+            .get(`tasks/${id}`)
+            .expect(200)
+            .expect(res => {
+                expect(res.body.title).to.be.eq('test');
+            })
+            .end(done);
+    });
+});
