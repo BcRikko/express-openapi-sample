@@ -3,7 +3,14 @@ import * as store from '../../store';
 
 export const get: Operation = (req, res) => {
     const task = store.getTaskById(req.params.id);
-    res.status(200).json(task)
+    if (task) {
+        res.status(200).json(task);
+    } else {
+        res.status(404).json({
+            code: 404,
+            message: '指定IDのタスクが見つかりませんでした'
+        });
+    }
 };
 
 get.apiDoc = {
@@ -66,6 +73,37 @@ put.apiDoc = {
             schema: {
                 $ref: '#/definitions/TaskOne'
             }
+        },
+        default: {
+            description: '予期しないエラー',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
+        }
+    }
+};
+
+export const del: Operation = (req, res) => {
+    const result = store.deleteTaskById(req.params.id);
+    res.status(200).json(result);
+};
+
+del.apiDoc = {
+    summary: '指定IDタスクの削除',
+    description: 'パスに指定されたIDのタスクを削除します',
+    operationId: 'deleteTaskById',
+    parameters: [
+        {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'integer',
+            format: 'int32'
+        }
+    ],
+    responses: {
+        200: {
+            description: 'タスクを削除しました'
         },
         default: {
             description: '予期しないエラー',

@@ -32,10 +32,7 @@ describe('GET /tasks/{id}', () => {
     it('異常: ID指定でダミーデータが取得できるか？', done => {
         agent
             .get('tasks/1')
-            .expect(200)
-            .expect(res => {
-                expect(res.body.length).to.be.eq(0);
-            })
+            .expect(404)
             .end(done);
     });
 });
@@ -81,6 +78,23 @@ describe('PUT /tasks/{id}', () => {
                 expect(res.body.title).to.be.eq('updated');
                 expect(res.body.is_done).to.be.true;
             })
+            .end(done);
+    });
+});
+
+describe('DELETE /tasks/{id}', () => {
+    it('タスクを削除できるか？', done => {
+        agent
+            .delete('tasks/0')
+            .expect(200)
+            .expect('Content-Length', '0')
+            .end(done);
+    });
+
+    it('タスクがちゃんと消えているか？', done => {
+        agent
+            .get('tasks/0')
+            .expect(404)
             .end(done);
     });
 });
