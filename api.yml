@@ -1,5 +1,5 @@
 swagger: '2.0'
-
+basePath: '/v1'
 info:
   version: "1.0"
   title: Todo Application API

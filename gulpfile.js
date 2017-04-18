@@ -4,9 +4,9 @@ const tslint = require('gulp-tslint');
 const typescript = require('gulp-typescript');
 const sourcemap = require('gulp-sourcemaps');
 const del = require('del');
-const mocha = require('mocha');
+const mocha = require('gulp-mocha');
 
-const DEST = 'dist';
+const DEST = 'server';
 
 gulp.task('tslint', () => {
     return gulp
@@ -49,7 +49,7 @@ gulp.task('test', ['build'], () => {
     ])
     .pipe(mocha({
         reporter: 'spec',
-        timeout: 3000
+        timeout: 5000
     }));
 });
 
