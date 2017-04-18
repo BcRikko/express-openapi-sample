@@ -15,3 +15,7 @@ let _tasks = <ITask[]>[
 export const getTasks = () => {
     return _tasks || [];
 };
+
+export const getTaskById = id => {
+    return _tasks.find(a => a.id === id) || [];
+};

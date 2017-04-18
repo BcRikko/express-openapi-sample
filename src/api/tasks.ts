@@ -1,5 +1,5 @@
 import { Operation } from 'express-openapi';
-import * as store from '../store'
+import * as store from '../store';
 
 export const get: Operation = (req, res) => {
     const tasks = store.getTasks();
@@ -22,7 +22,7 @@ get.apiDoc = {
         default: {
             description: '予期しないエラー',
             schema: {
-                additionalProperties: true
+                $ref: '#/definitions/Error'
             }
         }
     }
