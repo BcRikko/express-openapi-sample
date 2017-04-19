@@ -19,11 +19,7 @@ get.apiDoc = {
     operationId: 'getTaskById',
     parameters: [
         {
-            in: 'path',
-            name: 'id',
-            required: true,
-            type: 'integer',
-            format: 'int32'
+            $ref: '#/parameters/id'
         }
     ],
     responses: {
@@ -63,11 +59,7 @@ put.apiDoc = {
     operationId: 'updateTaskById',
     parameters: [
         {
-            name: 'id',
-            in: 'path',
-            required: true,
-            type: 'integer',
-            format: 'int32'
+            $ref: '#/parameters/id'
         },
         {
             name: 'task',
@@ -114,11 +106,7 @@ del.apiDoc = {
     operationId: 'deleteTaskById',
     parameters: [
         {
-            name: 'id',
-            in: 'path',
-            required: true,
-            type: 'integer',
-            format: 'int32'
+            $ref: '#/parameters/id'
         }
     ],
     responses: {

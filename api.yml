@@ -8,6 +8,14 @@ consumes:
 produces:
   - application/json
 paths: {}
+parameters:
+  id:
+    description: タスクID
+    name: id
+    in: path
+    required: true
+    type: integer
+    format: int32
 definitions:
   Error:
     type: 'object'
