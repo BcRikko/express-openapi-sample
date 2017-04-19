@@ -23,6 +23,10 @@ paths:
             type: 'array'
             items:
               $ref: '#/definitions/TaskList'
+        404:
+          description: 'タスク一覧が取得できませんでした'
+          schema: 
+            $ref: '#/definitions/Error'
         default:
           description: '予期しないエラー'
           schema:
@@ -43,6 +47,10 @@ paths:
           description: タスクを登録しました
           schema:
             $ref: '#/definitions/TaskOne'
+        400:
+          description: 'タスクが登録できませんでした'
+          schema: 
+            $ref: '#/definitions/Error'
         default:
           description: '予期しないエラー'
           schema:
@@ -59,6 +67,10 @@ paths:
           description: タスクを取得しました
           schema:
             $ref: '#/definitions/TaskOne'
+        404:
+          description: '指定IDのタスクが見つかりませんでした'
+          schema: 
+            $ref: '#/definitions/Error'
         default:
           description: '予期しないエラー'
           schema:
@@ -79,6 +91,10 @@ paths:
           description: タスクを更新しました
           schema:
             $ref: '#/definitions/TaskOne'
+        400:
+          description: 'タスクが更新できませんでした'
+          schema: 
+            $ref: '#/definitions/Error'
         default:
           description: '予期しないエラー'
           schema:
@@ -92,6 +108,10 @@ paths:
       responses:
         200:
           description: タスクを削除しました
+        400:
+          description: 'タスクが削除できませんでした'
+          schema: 
+            $ref: '#/definitions/Error'
         default:
           description: '予期しないエラー'
           schema:
