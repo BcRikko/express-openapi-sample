@@ -33,6 +33,12 @@ get.apiDoc = {
                 $ref: '#/definitions/TaskOne'
             }
         },
+        404: {
+            description: '指定IDのタスクが見つかりませんでした',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
+        },
         default: {
             description: '予期しないエラー',
             schema: {
@@ -78,6 +84,12 @@ put.apiDoc = {
                 $ref: '#/definitions/TaskOne'
             }
         },
+        400: {
+            description: 'タスクが更新できませんでした',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
+        },
         default: {
             description: '予期しないエラー',
             schema: {
@@ -112,6 +124,12 @@ del.apiDoc = {
     responses: {
         200: {
             description: 'タスクを削除しました'
+        },
+        400: {
+            description: 'タスクが削除できませんでした',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
         },
         default: {
             description: '予期しないエラー',

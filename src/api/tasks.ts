@@ -27,6 +27,12 @@ get.apiDoc = {
                 }
             }
         },
+        404: {
+            description: 'タスク一覧が取得できませんでした',
+            schema: {
+                $ref: '#/definitions/Error'
+            }
+        },
         default: {
             description: '予期しないエラー',
             schema: {
@@ -63,6 +69,12 @@ post.apiDoc = {
             description: 'タスクを登録しました',
             schema: {
                 $ref: '#/definitions/TaskOne'
+            }
+        },
+        400: {
+            description: 'タスクが登録できませんでした',
+            schema: {
+                $ref: '#/definitions/Error'
             }
         },
         default: {
