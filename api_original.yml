@@ -53,12 +53,7 @@ paths:
       description: |
         パスに指定されたIDのタスクを取得します
       parameters:
-        -
-          name: 'id'
-          in: 'path'
-          required: true
-          type: integer
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: タスクを取得しました
@@ -73,12 +68,7 @@ paths:
       description: |
         パスに指定されたIDのタスクを更新します
       parameters:
-        -
-          name: 'id'
-          in: 'path'
-          required: true
-          type: integer
-          format: int32
+        - $ref: '#/parameters/id'
         -
           name: 'task'
           in: 'body'
@@ -98,12 +88,7 @@ paths:
       description: |
         パスに指定されたIDのタスクを削除します
       parameters:
-        -
-          name: 'id'
-          in: 'path'
-          required: true
-          type: integer
-          format: int32
+        - $ref: '#/parameters/id'
       responses:
         200:
           description: タスクを削除しました
