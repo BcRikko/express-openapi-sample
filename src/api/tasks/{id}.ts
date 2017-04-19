@@ -1,15 +1,13 @@
 import { Operation } from 'express-openapi';
 import * as store from '../../store';
+import * as api from '../../api';
 
 export const get: Operation = (req, res) => {
     const task = store.getTaskById(req.params.id);
     if (task) {
-        res.status(200).json(task);
+        api.responseJSON(res, 200, task);
     } else {
-        res.status(404).json({
-            code: 404,
-            message: '指定IDのタスクが見つかりませんでした'
-        });
+        api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
     }
 };
 
@@ -44,7 +42,11 @@ get.apiDoc = {
 
 export const put: Operation = (req, res) => {
     const task = store.updateTaskById(req.params.id, req.body);
-    res.status(200).json(task);
+    if (task) {
+        api.responseJSON(res, 200, task);
+    } else {
+        api.responseError(res, 400, 'タスクが更新できませんでした');
+    }
 };
 
 put.apiDoc = {
@@ -84,8 +86,12 @@ put.apiDoc = {
 };
 
 export const del: Operation = (req, res) => {
-    const result = store.deleteTaskById(req.params.id);
-    res.status(200).json(result);
+    const task = store.deleteTaskById(req.params.id);
+    if (task) {
+        api.responseJSON(res, 200);
+    } else {
+        api.responseError(res, 400, 'タスクが削除できませんでした');
+    }
 };
 
 del.apiDoc = {

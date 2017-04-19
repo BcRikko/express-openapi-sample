@@ -44,7 +44,8 @@ export const updateTaskById = (id: number, param: ITask): ITask => {
     return _tasks[index];
 };
 
-export const deleteTaskById = (id: number): void => {
+export const deleteTaskById = (id: number): ITask => {
     const index = _tasks.findIndex(a => a.id === id);
-    _tasks.splice(index, 1);
+    const task = _tasks.splice(index, 1);
+    return task[0];
 };

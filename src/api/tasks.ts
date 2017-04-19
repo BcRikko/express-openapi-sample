@@ -1,9 +1,14 @@
 import { Operation } from 'express-openapi';
 import * as store from '../store';
+import * as api from '../api';
 
 export const get: Operation = (req, res) => {
     const tasks = store.getTasks();
-    res.status(200).json(tasks);
+    if (tasks && tasks.length) {
+        api.responseJSON(res, 200, tasks);
+    } else {
+        api.responseError(res, 404, 'タスク一覧が取得できませんでした')
+    }
 };
 
 get.apiDoc = {
@@ -31,7 +36,11 @@ get.apiDoc = {
 
 export const post: Operation = (req, res) => {
     const task = store.createTask(req.body);
-    res.status(201).json(task);
+    if (task) {
+        api.responseJSON(res, 201, task);
+    } else {
+        api.responseJSON(res, 400, 'タスクが登録できませんでした');
+    }
 };
 
 post.apiDoc = {
