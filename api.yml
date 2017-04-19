@@ -3,6 +3,10 @@ basePath: '/v1'
 info:
   version: "1.0"
   title: Todo Application API
+consumes:
+  - application/json
+produces:
+  - application/json
 paths: {}
 definitions:
   Error:
