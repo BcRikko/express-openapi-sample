@@ -56,3 +56,5 @@ gulp.task('test', ['build'], () => {
 gulp.task('watch', () => {
     gulp.watch('src/**/*.ts', ['build']);
 });
+
+gulp.task('default', ['build']);

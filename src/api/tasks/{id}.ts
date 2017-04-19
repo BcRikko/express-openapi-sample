@@ -1,6 +1,8 @@
 import { Operation } from 'express-openapi';
-import * as store from '../../store';
+import Store from '../../store';
 import * as api from '../../api';
+
+const store = Store.instance;
 
 export const get: Operation = (req, res) => {
     const task = store.getTaskById(req.params.id);

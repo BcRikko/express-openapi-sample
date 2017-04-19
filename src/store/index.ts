@@ -1,54 +1,68 @@
-interface ITask {
+export interface ITask {
     id: number,
     title: string,
     is_done?: boolean
 }
 
-let _tasks = <ITask[]>[
-    {
-        id: 0,
-        title: 'dummy',
-        is_done: false
-    }
-];
+class Store {
+    private static _instance: Store;
+    private constructor() {}
 
-export const getTasks = () => {
-    return _tasks || [];
-};
+    private counter = 1;
+    private tasks:ITask[] = [
+        {
+            id: 0,
+            title: 'dummy',
+            is_done: false
+        }
+    ];
 
-export const getTaskById = (id: number) => {
-    return _tasks.find(a => a.id === id);
-};
-
-export const createTask = (param: ITask): ITask => {
-    const data = {
-        id: _tasks.length || 0,
-        title: param.title,
-        is_done: param.is_done || false
-    };
-
-    _tasks.push(data);
-    return data;
-};
-
-export const updateTaskById = (id: number, param: ITask): ITask => {
-    const index = _tasks.findIndex(a => a.id === id);
-    
-    const self = _tasks[index];
-    _tasks[index] = {
-        id: self.id,
-        title: param.title || self.title,
-        is_done: param.is_done || self.is_done
+    public static get instance(): Store {
+        if (!this._instance) {
+            this._instance = new Store();
+        }
+        return this._instance;
     }
 
-    return _tasks[index];
-};
-
-export const deleteTaskById = (id: number): ITask => {
-    const index = _tasks.findIndex(a => a.id === id);
-    if (index > -1) {
-        return _tasks.splice(index, 1)[0];
+    public getTasks(): ITask[] {
+        return this.tasks;
     }
 
-    return null;
-};
+    public getTaskById(id: number): ITask {
+        return this.tasks.find(a => a.id === id);
+    }
+
+    public createTask(param: ITask): ITask {
+        const task = {
+            id: this.counter++,
+            title: param.title,
+            is_done: param.is_done || false
+        };
+        this.tasks.push(task);
+        return task;
+    }
+
+    public updateTaskById(id: number, param: ITask): ITask {
+        const index = this.tasks.findIndex(a => a.id === id);
+        const self = this.tasks[index];
+        const task = {
+            id: self.id,
+            title: param.title || self.title,
+            is_done: param.is_done || self.is_done
+        };
+        
+        this.tasks[index] = task;
+        return task;
+    }
+
+    public deleteTaskById(id: number): ITask {
+        const index = this.tasks.findIndex(a => a.id === id);
+        if (index > -1) {
+            return this.tasks.splice(index, 1)[0];
+        }
+
+        return null;
+    }
+}
+
+export default Store;
