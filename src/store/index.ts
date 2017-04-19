@@ -46,6 +46,9 @@ export const updateTaskById = (id: number, param: ITask): ITask => {
 
 export const deleteTaskById = (id: number): ITask => {
     const index = _tasks.findIndex(a => a.id === id);
-    const task = _tasks.splice(index, 1);
-    return task[0];
+    if (index > -1) {
+        return _tasks.splice(index, 1)[0];
+    }
+
+    return null;
 };

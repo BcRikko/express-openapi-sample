@@ -39,7 +39,7 @@ describe('GET /tasks/{id}', () => {
 
 describe('POST /tasks', () => {
     let id = 0;
-    it('タスクが登録できるか？', done => {
+    it('正常: タスクが登録できるか？', done => {
         agent
             .post('tasks')
             .send({
@@ -51,6 +51,23 @@ describe('POST /tasks', () => {
                 expect(res.body.is_done).to.be.false;
                 id = res.body.id;
             })
+            .end(done);
+    });
+
+    it('異常: タスクが登録できるか？（型違い）', done => {
+        agent
+            .post('tasks')
+            .send({
+                title: 1
+            })
+            .expect(400)
+            .end(done);
+    });
+
+    it('異常: タスクが登録できるか？（パラメータ不足）', done => {
+        agent
+            .post('tasks')
+            .expect(400)
             .end(done);
     });
 
@@ -66,7 +83,7 @@ describe('POST /tasks', () => {
 });
 
 describe('PUT /tasks/{id}', () => {
-    it('タスクを更新できるか？', done => {
+    it('正常: タスクを更新できるか？', done => {
         agent
             .put('tasks/0')
             .send({
@@ -80,14 +97,41 @@ describe('PUT /tasks/{id}', () => {
             })
             .end(done);
     });
+
+    it('異常: タスクを更新できるか？（型違い）', done => {
+        agent
+            .put('tasks/0')
+            .send({
+                title: 'updated',
+                is_done: 'true'
+            })
+            .expect(400)
+            .end(done);
+    });
+
+    it('異常: タスクを更新できるか？（型違い）', done => {
+        agent
+            .put('tasks/0')
+            .send({
+                is_done: true
+            })
+            .expect(400)
+            .end(done);
+    });
 });
 
 describe('DELETE /tasks/{id}', () => {
-    it('タスクを削除できるか？', done => {
+    it('正常: タスクを削除できるか？', done => {
         agent
             .delete('tasks/0')
             .expect(200)
-            .expect('Content-Length', '0')
+            .end(done);
+    });
+
+    it('異常: タスクを削除できるか？', done => {
+        agent
+            .delete('tasks/999')
+            .expect(400)
             .end(done);
     });
 

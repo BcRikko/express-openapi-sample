@@ -22,6 +22,8 @@ definitions:
       $ref: '#/definitions/TaskOne'
   TaskOne:
     type: 'object'
+    required:
+      - title
     properties:
       id:
         description: タスクのID
