@@ -21,7 +21,6 @@
         "no-unused-vars": 0,
         "no-debugger": 2,
         "no-eval": 2,
-        "quote-props": [1, "as-needed", { "keywords": true }],
-        "no-prototypejs-call": 1
+        "quote-props": [1, "as-needed", { "keywords": true }]
     }
 }
