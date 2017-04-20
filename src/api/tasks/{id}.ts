@@ -1,11 +1,9 @@
 import { Operation } from 'express-openapi';
-import Store from '../../store';
+import Task from '../../models/Task';
 import * as api from '../../api';
 
-const store = Store.instance;
-
 export const get: Operation = (req, res) => {
-    const task = store.getTaskById(req.params.id);
+    const task = Task.get(req.params.id);
     if (task) {
         api.responseJSON(res, 200, task);
     } else {
@@ -45,7 +43,7 @@ get.apiDoc = {
 };
 
 export const put: Operation = (req, res) => {
-    const task = store.updateTaskById(req.params.id, req.body);
+    const task = Task.update(req.params.id, req.body);
     if (task) {
         api.responseJSON(res, 200, task);
     } else {
@@ -92,7 +90,7 @@ put.apiDoc = {
 };
 
 export const del: Operation = (req, res) => {
-    const task = store.deleteTaskById(req.params.id);
+    const task = Task.delete(req.params.id);
     if (task) {
         api.responseJSON(res, 200);
     } else {

@@ -1,11 +1,9 @@
 import { Operation } from 'express-openapi';
-import Store from '../store';
+import Task from '../models/Task';
 import * as api from '../api';
 
-const store = Store.instance;
-
 export const get: Operation = (req, res) => {
-    const tasks = store.getTasks();
+    const tasks = Task.all();
     if (tasks && tasks.length) {
         api.responseJSON(res, 200, tasks);
     } else {
@@ -43,7 +41,7 @@ get.apiDoc = {
 };
 
 export const post: Operation = (req, res) => {
-    const task = store.createTask(req.body);
+    const task = Task.add(req.body);
     if (task) {
         api.responseJSON(res, 201, task);
     } else {
