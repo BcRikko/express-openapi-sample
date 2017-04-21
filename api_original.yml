@@ -17,6 +17,9 @@ paths:
       description: |
         タスク一覧を取得します
       operationId: getTaskList
+      parameters:
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/limit'
       responses:
         200:
           description: タスク一覧を取得しました
@@ -126,6 +129,20 @@ parameters:
     required: true
     type: integer
     format: int32
+  offset:
+    description: 取得するレコードの開始位置
+    name: offset
+    in: query
+    type: integer
+    format: int32
+    minimum: 0
+  limit:
+    description: 取得するレコードの件数
+    name: limit
+    in: query
+    type: integer
+    format: int32
+    minimum: 1
 
 definitions:
   Error:

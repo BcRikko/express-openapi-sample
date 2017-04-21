@@ -12,7 +12,22 @@ describe('GET /tasks', () => {
             .get('tasks')
             .expect(200)
             .expect(res => {
-                expect(res.body.tasks.length).to.be.eq(1);
+                expect(res.body.tasks.length).to.be.eq(5);
+            })
+            .end(done);
+    });
+
+
+    it('offsetとlimitを指定してデータが取得できるか？', done => {
+        agent
+            .get('tasks')
+            .query({
+                offset: 1,
+                limit: 2
+            })
+            .expect(200)
+            .expect(res => {
+                expect(res.body.tasks.length).to.be.eq(2);
             })
             .end(done);
     });
@@ -31,7 +46,7 @@ describe('GET /tasks/{id}', () => {
 
     it('存在しないタスクはNot Foundエラーになるか？', done => {
         agent
-            .get('tasks/1')
+            .get('tasks/999')
             .expect(404)
             .end(done);
     });

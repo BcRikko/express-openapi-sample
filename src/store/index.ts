@@ -4,11 +4,31 @@ class Store {
     private static _instance: Store;
     private constructor() {}
 
-    public counter = 1;
+    public counter = 5;
     public tasks:ITask[] = [
         {
             id: 0,
-            title: 'dummy',
+            title: 'dummy0',
+            is_done: false
+        },
+        {
+            id: 1,
+            title: 'dummy1',
+            is_done: false
+        },
+        {
+            id: 2,
+            title: 'dummy2',
+            is_done: false
+        },
+        {
+            id: 3,
+            title: 'dummy3',
+            is_done: false
+        },
+        {
+            id: 4,
+            title: 'dummy4',
             is_done: false
         }
     ];

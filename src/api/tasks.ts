@@ -6,7 +6,7 @@ import { NotFoundError, ITaskList, ITaskOne } from '../models/Task';
 export const get: Operation = (req, res) => {
     let body: ITaskList;
     try {
-        body = Task.all();
+        body = Task.all(req.query);
     } catch (err) {
         if (err instanceof NotFoundError) {
             api.responseError(res, 404, 'タスク一覧が取得できませんでした')
@@ -21,6 +21,10 @@ get.apiDoc = {
     summary: 'タスク一覧の取得',
     description: 'タスク一覧を取得します',
     operationId: 'getTasks',
+    parameters: [
+        { $ref: '#/parameters/offset' },
+        { $ref: '#/parameters/limit' }
+    ],
     responses: {
         200: {
             description: 'タスク一覧を取得しました',

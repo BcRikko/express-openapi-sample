@@ -15,6 +15,11 @@ export interface ITaskList {
     tasks: ITask[]
 }
 
+export interface IParameters {
+    offset?: number,
+    limit?: number
+}
+
 export class NotFoundError implements Error {
     public name = 'Not Found';
     constructor(public message: string) {}
@@ -28,9 +33,16 @@ export default class Task {
     constructor () {
     }
 
-    static all(): ITaskList {
+    static all(query: IParameters): ITaskList {
+        let tasks: ITask[];
+        const offset = query.offset || 0;
+        if (query.limit) {
+            tasks = store.tasks.slice(offset, offset + query.limit);
+        } else {
+            tasks = store.tasks.slice(offset);
+        }
         return {
-            tasks: store.tasks
+            tasks: tasks
         };
     }
 
