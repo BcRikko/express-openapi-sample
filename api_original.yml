@@ -24,9 +24,9 @@ paths:
         200:
           description: タスク一覧を取得しました
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/TaskList'
+            allOf:
+              - $ref: '#/definitions/TaskList'
+              - $ref: '#/definitions/PageInfo'
         404:
           description: タスク一覧が取得できませんでした
           schema: 
@@ -156,6 +156,23 @@ definitions:
       message:
         description: エラーメッセージ
         type: string
+  PageInfo:
+    type: object
+    readOnly: true
+    required:
+      - total
+      - offset
+    properties:
+      total:
+        description: 取得件数の上限数
+        type: integer
+        format: int32
+        minimum: 0
+      offset:
+        description: 取得したレコードの開始位置
+        type: integer
+        format: int32
+        minimum: 0
   Task:
     type: object
     readOnly: true

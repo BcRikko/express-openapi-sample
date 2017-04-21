@@ -28,6 +28,7 @@ describe('GET /tasks', () => {
             .expect(200)
             .expect(res => {
                 expect(res.body.tasks.length).to.be.eq(2);
+                expect(res.body.total).to.be.eq(2);
             })
             .end(done);
     });

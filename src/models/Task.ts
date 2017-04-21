@@ -15,6 +15,13 @@ export interface ITaskList {
     tasks: ITask[]
 }
 
+export interface IPageInfo {
+    total: number,
+    offset: number
+}
+
+export interface ITaskListResponse extends ITaskList, IPageInfo {}
+
 export interface IParameters {
     offset?: number,
     limit?: number
@@ -33,7 +40,7 @@ export default class Task {
     constructor () {
     }
 
-    static all(query: IParameters): ITaskList {
+    static all(query: IParameters): ITaskListResponse {
         let tasks: ITask[];
         const offset = query.offset || 0;
         if (query.limit) {
@@ -42,7 +49,9 @@ export default class Task {
             tasks = store.tasks.slice(offset);
         }
         return {
-            tasks: tasks
+            tasks: tasks,
+            total: tasks.length,
+            offset: offset
         };
     }
 
