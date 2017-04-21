@@ -42,7 +42,7 @@ paths:
           name: task
           in: body
           schema:
-            $ref: '#/definitions/TaskOne'
+            $ref: '#/definitions/TaskToPost'
       responses:
         201:
           description: タスクを登録しました
@@ -86,7 +86,7 @@ paths:
           name: task
           in: body
           schema:
-            $ref: '#/definitions/TaskOne'
+            $ref: '#/definitions/TaskToPut'
       responses:
         200:
           description: タスクを更新しました
@@ -168,3 +168,28 @@ definitions:
     properties:
       task:
         $ref: '#/definitions/Task'
+  TaskToPost:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        description: タスクの名前
+        type: string
+        minLength: 1
+        maxLength: 64
+      is_done:
+        description: タスクの状態
+        default: false
+        type: boolean
+  TaskToPut:
+    type: object
+    properties:
+      title:
+        description: タスクの名前
+        type: string
+        minLength: 1
+        maxLength: 64
+      is_done:
+        description: タスクの状態
+        type: boolean

@@ -15,6 +15,15 @@ export interface ITaskList {
     tasks: ITask[]
 }
 
+export class NotFoundError implements Error {
+    public name = 'Not Found';
+    constructor(public message: string) {}
+
+    toString() {
+        return this.name + ': ' + this.message;
+    }
+}
+
 export default class Task {
     constructor () {
     }
@@ -27,9 +36,13 @@ export default class Task {
 
     static get(id: number): ITaskOne {
         const task = store.tasks.find(a => a.id === id);
-        return {
-            task: task
-        };
+        if (task) {
+            return {
+                task: task
+            };
+        } else {
+            throw new NotFoundError('タスクが見つかりませんでした');
+        }
     }
 
     static add(param: ITask): ITaskOne {
@@ -47,6 +60,10 @@ export default class Task {
 
     static update(id: number, param: ITask): ITaskOne {
         const index = store.tasks.findIndex(a => a.id === id);
+        if (index < 0) {
+            throw new NotFoundError('タスクが見つかりませんでした');
+        }
+
         const self = store.tasks[index];
         const task: ITask = {
             id: self.id,
@@ -62,15 +79,13 @@ export default class Task {
 
     static delete(id: number): ITaskOne {
         const index = store.tasks.findIndex(a => a.id === id);
-        if (index > -1) {
-            const task = store.tasks.splice(index, 1)[0];
-            return {
-                task: task
-            };
+        if (index < 0) {
+            throw new NotFoundError('タスクが見つかりませんでした');
         }
-
+         
+        const task = store.tasks.splice(index, 1)[0];
         return {
-            task: null
+            task: task
         };
     }
 }

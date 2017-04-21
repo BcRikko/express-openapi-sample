@@ -1,14 +1,21 @@
 import { Operation } from 'express-openapi';
-import Task from '../../models/Task';
 import * as api from '../../api';
+import Task from '../../models/Task';
+import { NotFoundError, ITaskOne } from '../../models/Task';
 
 export const get: Operation = (req, res) => {
-    const body = Task.get(req.params.id);
-    if (body.task) {
-        api.responseJSON(res, 200, body);
-    } else {
-        api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
+    let body: ITaskOne;
+    try {
+        body = Task.get(req.params.id);
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
+        } else {
+            throw err;
+        }
     }
+    
+    api.responseJSON(res, 200, body);
 };
 
 get.apiDoc = {
@@ -43,12 +50,18 @@ get.apiDoc = {
 };
 
 export const put: Operation = (req, res) => {
-    const body = Task.update(req.params.id, req.body);
-    if (body.task) {
-        api.responseJSON(res, 200, body);
-    } else {
-        api.responseError(res, 400, 'タスクが更新できませんでした');
+    let body: ITaskOne;
+    try {
+        body = Task.update(req.params.id, req.body);
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
+        } else {
+            throw err;
+        }
     }
+
+    api.responseJSON(res, 200, body);
 };
 
 put.apiDoc = {
@@ -63,7 +76,7 @@ put.apiDoc = {
             name: 'task',
             in: 'body',
             schema: {
-                $ref: '#/definitions/TaskOne'
+                $ref: '#/definitions/TaskToPut'
             }
         }
     ],
@@ -74,8 +87,8 @@ put.apiDoc = {
                 $ref: '#/definitions/TaskOne'
             }
         },
-        400: {
-            description: 'タスクが更新できませんでした',
+        404: {
+            description: '指定IDのタスクが見つかりませんでした',
             schema: {
                 $ref: '#/definitions/Error'
             }
@@ -90,12 +103,18 @@ put.apiDoc = {
 };
 
 export const del: Operation = (req, res) => {
-    const body = Task.delete(req.params.id);
-    if (body.task) {
-        api.responseJSON(res, 200);
-    } else {
-        api.responseError(res, 400, 'タスクが削除できませんでした');
+    let body: ITaskOne;
+    try {
+        body = Task.delete(req.params.id);
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
+        } else {
+            throw err;
+        }
     }
+
+    api.responseJSON(res, 200, body);
 };
 
 del.apiDoc = {
@@ -111,8 +130,8 @@ del.apiDoc = {
         200: {
             description: 'タスクを削除しました'
         },
-        400: {
-            description: 'タスクが削除できませんでした',
+        404: {
+            description: '指定IDのタスクが見つかりませんでした',
             schema: {
                 $ref: '#/definitions/Error'
             }

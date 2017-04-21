@@ -1,14 +1,20 @@
 import { Operation } from 'express-openapi';
-import Task from '../models/Task';
 import * as api from '../api';
+import Task from '../models/Task';
+import { NotFoundError, ITaskList, ITaskOne } from '../models/Task';
 
 export const get: Operation = (req, res) => {
-    const body = Task.all();
-    if (body && body.tasks.length) {
-        api.responseJSON(res, 200, body);
-    } else {
-        api.responseError(res, 404, 'タスク一覧が取得できませんでした')
+    let body: ITaskList;
+    try {
+        body = Task.all();
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            api.responseError(res, 404, 'タスク一覧が取得できませんでした')
+        } else {
+            throw err;
+        }
     }
+    api.responseJSON(res, 200, body);
 };
 
 get.apiDoc = {
@@ -41,24 +47,26 @@ get.apiDoc = {
 };
 
 export const post: Operation = (req, res) => {
-    const body = Task.add(req.body);
-    if (body.task) {
-        api.responseJSON(res, 201, body);
-    } else {
+    let body: ITaskOne;
+    try {
+        body = Task.add(req.body);
+    } catch (err) {
         api.responseJSON(res, 400, 'タスクが登録できませんでした');
     }
+
+    api.responseJSON(res, 201, body);
 };
 
 post.apiDoc = {
     summary: 'タスクの登録',
     description: 'タスクを登録します',
-    operationId: 'createTask',
+    operationId: 'postTask',
     parameters: [
         {
             name: 'task',
             in: 'body',
             schema: {
-                $ref: '#/definitions/TaskOne'
+                $ref: '#/definitions/TaskToPost'
             }
         }
     ],

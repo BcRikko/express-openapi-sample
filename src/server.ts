@@ -18,7 +18,14 @@ class Server {
         openapi.initialize({
             app: this.app,
             apiDoc: api,
-            paths: './server/api'
+            paths: './server/api',
+            errorMiddleware: (err, req, res, next) => {
+                res.status(400);
+                res.json(err);
+            },
+            errorTransformer: (openapi, jsonschema) => {
+                return openapi.message;
+            }
         });
     }
 

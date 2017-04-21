@@ -19,7 +19,7 @@ describe('GET /tasks', () => {
 });
 
 describe('GET /tasks/{id}', () => {
-    it('正常: ID指定でダミーデータが取得できるか？', done => {
+    it('ID指定でダミーデータが取得できるか？', done => {
         agent
             .get('tasks/0')
             .expect(200)
@@ -29,7 +29,7 @@ describe('GET /tasks/{id}', () => {
             .end(done);
     });
 
-    it('異常: ID指定でダミーデータが取得できるか？', done => {
+    it('存在しないタスクはNot Foundエラーになるか？', done => {
         agent
             .get('tasks/1')
             .expect(404)
@@ -39,7 +39,7 @@ describe('GET /tasks/{id}', () => {
 
 describe('POST /tasks', () => {
     let id = 0;
-    it('正常: タスクが登録できるか？', done => {
+    it('タスクが登録できるか？', done => {
         agent
             .post('tasks')
             .send({
@@ -54,7 +54,7 @@ describe('POST /tasks', () => {
             .end(done);
     });
 
-    it('異常: タスクが登録できるか？（型違い）', done => {
+    it('型が違う場合はBad Requestになるか？', done => {
         agent
             .post('tasks')
             .send({
@@ -64,7 +64,7 @@ describe('POST /tasks', () => {
             .end(done);
     });
 
-    it('異常: タスクが登録できるか？（パラメータ不足）', done => {
+    it('パラメータが不足した場合はBad Requestになるか？', done => {
         agent
             .post('tasks')
             .expect(400)
@@ -83,7 +83,7 @@ describe('POST /tasks', () => {
 });
 
 describe('PUT /tasks/{id}', () => {
-    it('正常: タスクを更新できるか？', done => {
+    it('タスクを更新できるか？', done => {
         agent
             .put('tasks/0')
             .send({
@@ -98,22 +98,12 @@ describe('PUT /tasks/{id}', () => {
             .end(done);
     });
 
-    it('異常: タスクを更新できるか？（型違い）', done => {
+    it('型が違う場合はBad Requestになるか？', done => {
         agent
             .put('tasks/0')
             .send({
                 title: 'updated',
                 is_done: 'true'
-            })
-            .expect(400)
-            .end(done);
-    });
-
-    it('異常: タスクを更新できるか？（型違い）', done => {
-        agent
-            .put('tasks/0')
-            .send({
-                is_done: true
             })
             .expect(400)
             .end(done);
@@ -131,7 +121,7 @@ describe('DELETE /tasks/{id}', () => {
     it('異常: タスクを削除できるか？', done => {
         agent
             .delete('tasks/999')
-            .expect(400)
+            .expect(404)
             .end(done);
     });
 
