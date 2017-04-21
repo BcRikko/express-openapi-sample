@@ -1,4 +1,5 @@
 import Store from '../store';
+import { IError } from '../api';
 const store = Store.instance;
 
 export interface ITask {
@@ -25,11 +26,6 @@ export interface ITaskListResponse extends ITaskList, IPageInfo {}
 export interface IParameters {
     offset?: number,
     limit?: number
-}
-
-export interface IError {
-    code: number,
-    message: string
 }
 
 export default class Task {

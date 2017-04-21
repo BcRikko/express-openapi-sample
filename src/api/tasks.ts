@@ -10,7 +10,7 @@ export const get: Operation = (req, res) => {
             api.responseJSON(res, 200, body);
         })
         .catch(err => {
-            api.responseError(res, err.code, err.message);
+            api.responseError(res, err);
         });
 };
 
@@ -54,7 +54,7 @@ export const post: Operation = (req, res) => {
             api.responseJSON(res, 201, body);
         })
         .catch(err => {
-            api.responseError(res, err.code, err.message);
+            api.responseError(res, err);
         });
 };
 

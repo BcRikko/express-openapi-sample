@@ -10,7 +10,7 @@ export const get: Operation = (req, res) => {
             api.responseJSON(res, 200, body);
         })
         .catch(err => {
-            api.responseError(res, err.code, err.message);
+            api.responseError(res, err);
         });
 };
 
@@ -52,7 +52,7 @@ export const put: Operation = (req, res) => {
             api.responseJSON(res, 200, body);
         })
         .catch(err => {
-            api.responseError(res, err.code, err.message);
+            api.responseError(res, err);
         });
 };
 
@@ -101,7 +101,7 @@ export const del: Operation = (req, res) => {
             api.responseJSON(res, 200, body);
         })
         .catch(err => {
-            api.responseError(res, err.code, err.message);
+            api.responseError(res, err);
         });
 };
 

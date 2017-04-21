@@ -6,13 +6,13 @@ export interface IError {
     readonly message: string;
 }
 
-export function responseError(res: express.Response, code: number, message: string): express.Response {
+export function responseError(res: express.Response, reason: IError): express.Response {
     const error: IError = {
-        code: code,
-        message: message
+        code: reason.code,
+        message: reason.message
     };
 
-    res.status(code);
+    res.status(reason.code);
     res.json(error);
     return res;
 }
