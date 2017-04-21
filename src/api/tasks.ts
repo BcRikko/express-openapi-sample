@@ -1,20 +1,17 @@
 import { Operation } from 'express-openapi';
 import * as api from '../api';
 import Task from '../models/Task';
-import { NotFoundError, ITaskList, ITaskOne } from '../models/Task';
+import { ITaskList, ITaskOne } from '../models/Task';
 
 export const get: Operation = (req, res) => {
-    let body: ITaskList;
-    try {
-        body = Task.all(req.query);
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            api.responseError(res, 404, 'タスク一覧が取得できませんでした')
-        } else {
-            throw err;
-        }
-    }
-    api.responseJSON(res, 200, body);
+    Task
+        .all(req.query)
+        .then(body => {
+            api.responseJSON(res, 200, body);
+        })
+        .catch(err => {
+            api.responseError(res, err.code, err.message);
+        });
 };
 
 get.apiDoc = {
@@ -51,14 +48,14 @@ get.apiDoc = {
 };
 
 export const post: Operation = (req, res) => {
-    let body: ITaskOne;
-    try {
-        body = Task.add(req.body);
-    } catch (err) {
-        api.responseJSON(res, 400, 'タスクが登録できませんでした');
-    }
-
-    api.responseJSON(res, 201, body);
+    Task
+        .add(req.body)
+        .then(body => {
+            api.responseJSON(res, 201, body);
+        })
+        .catch(err => {
+            api.responseError(res, err.code, err.message);
+        });
 };
 
 post.apiDoc = {

@@ -27,86 +27,108 @@ export interface IParameters {
     limit?: number
 }
 
-export class NotFoundError implements Error {
-    public name = 'Not Found';
-    constructor(public message: string) {}
-
-    toString() {
-        return this.name + ': ' + this.message;
-    }
+export interface IError {
+    code: number,
+    message: string
 }
 
 export default class Task {
     constructor () {
     }
 
-    static all(query: IParameters): ITaskListResponse {
+    static all(query: IParameters): Promise<ITaskListResponse> {
         let tasks: ITask[];
         const offset = query.offset || 0;
-        if (query.limit) {
-            tasks = store.tasks.slice(offset, offset + query.limit);
-        } else {
-            tasks = store.tasks.slice(offset);
-        }
-        return {
-            tasks: tasks,
-            total: tasks.length,
-            offset: offset
-        };
+
+        return new Promise((resolve, reject) => {
+            if (query.limit) {
+                tasks = store.tasks.slice(offset, offset + query.limit);
+            } else {
+                tasks = store.tasks.slice(offset);
+            }
+
+            setTimeout(() => {
+                resolve({
+                    tasks: tasks,
+                    total: tasks.length,
+                    offset: offset
+                });
+            }, 100);
+        });
     }
 
-    static get(id: number): ITaskOne {
-        const task = store.tasks.find(a => a.id === id);
-        if (task) {
-            return {
-                task: task
-            };
-        } else {
-            throw new NotFoundError('タスクが見つかりませんでした');
-        }
+    static get(id: number): Promise<ITaskOne> {
+        return new Promise((resolve, reject) => {
+            const task = store.tasks.find(a => a.id === id);
+            if (task) {
+                setTimeout(() => {
+                    resolve({ task: task });
+                }, 100);
+            } else {
+                setTimeout(() => {
+                    reject(<IError>{
+                        code: 404,
+                        message: '指定IDのタスクが見つかりませんでした'
+                    });
+                }, 100);
+            }
+        });
     }
 
-    static add(param: ITask): ITaskOne {
+    static add(param: ITask): Promise<ITaskOne> {
         const task: ITask = {
             id: store.counter++,
             title: param.title,
             is_done: param.is_done || false
         };
 
-        store.tasks.push(task);
-        return {
-            task: task
-        };
+        return new Promise((resolve, reject) => {
+            store.tasks.push(task);
+            setTimeout(() => {
+                resolve({ task: task });
+            }, 100);
+        });
     }
 
-    static update(id: number, param: ITask): ITaskOne {
-        const index = store.tasks.findIndex(a => a.id === id);
-        if (index < 0) {
-            throw new NotFoundError('タスクが見つかりませんでした');
-        }
+    static update(id: number, param: ITask): Promise<ITaskOne> {
+        return new Promise((resolve, reject) => {
+            const index = store.tasks.findIndex(a => a.id === id);
+            if (index < 0) {
+                setTimeout(() => {
+                    reject(<IError>{
+                        code: 404,
+                        message: '指定IDのタスクが見つかりませんでした'
+                    });
+                }, 100);
+            }
 
-        const self = store.tasks[index];
-        const task: ITask = {
-            id: self.id,
-            title: param.title || self.title,
-            is_done: param.is_done || self.is_done
-        };
+            const self = store.tasks[index];
+            const task: ITask = {
+                id: self.id,
+                title: param.title || self.title,
+                is_done: param.is_done || self.is_done
+            };
 
-        store.tasks.splice(index, 1, task);
-        return {
-            task: task
-        };
+            store.tasks.splice(index, 1, task);
+
+            setTimeout(() => {
+                resolve({ task: task });
+            }, 100);
+        });
     }
 
-    static delete(id: number): ITaskOne {
-        const index = store.tasks.findIndex(a => a.id === id);
-        if (index < 0) {
-            throw new NotFoundError('タスクが見つかりませんでした');
-        }
-         
-        const task = store.tasks.splice(index, 1)[0];
-        return {
-            task: task
-        };
+    static delete(id: number): Promise<ITaskOne> {
+        return new Promise((resolve, reject) => {
+            const index = store.tasks.findIndex(a => a.id === id);
+            if (index < 0) {
+                reject(<IError>{
+                    code: 404,
+                    message: '指定IDのタスクが見つかりませんでした'
+                });
+            }
+            
+            const task = store.tasks.splice(index, 1)[0];
+            resolve({ task: task });
+        });
     }
 }

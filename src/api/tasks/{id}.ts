@@ -1,21 +1,17 @@
 import { Operation } from 'express-openapi';
 import * as api from '../../api';
 import Task from '../../models/Task';
-import { NotFoundError, ITaskOne } from '../../models/Task';
+import { ITaskOne } from '../../models/Task';
 
 export const get: Operation = (req, res) => {
-    let body: ITaskOne;
-    try {
-        body = Task.get(req.params.id);
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
-        } else {
-            throw err;
-        }
-    }
-    
-    api.responseJSON(res, 200, body);
+    Task
+        .get(req.params.id)
+        .then(body => {
+            api.responseJSON(res, 200, body);
+        })
+        .catch(err => {
+            api.responseError(res, err.code, err.message);
+        });
 };
 
 get.apiDoc = {
@@ -50,18 +46,14 @@ get.apiDoc = {
 };
 
 export const put: Operation = (req, res) => {
-    let body: ITaskOne;
-    try {
-        body = Task.update(req.params.id, req.body);
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
-        } else {
-            throw err;
-        }
-    }
-
-    api.responseJSON(res, 200, body);
+    Task
+        .update(req.params.id, req.body)
+        .then(body => {
+            api.responseJSON(res, 200, body);
+        })
+        .catch(err => {
+            api.responseError(res, err.code, err.message);
+        });
 };
 
 put.apiDoc = {
@@ -103,18 +95,14 @@ put.apiDoc = {
 };
 
 export const del: Operation = (req, res) => {
-    let body: ITaskOne;
-    try {
-        body = Task.delete(req.params.id);
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
-        } else {
-            throw err;
-        }
-    }
-
-    api.responseJSON(res, 200, body);
+    Task
+        .delete(req.params.id)
+        .then(body => {
+            api.responseJSON(res, 200, body);
+        })
+        .catch(err => {
+            api.responseError(res, err.code, err.message);
+        });
 };
 
 del.apiDoc = {
