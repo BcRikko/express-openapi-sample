@@ -12,7 +12,7 @@ describe('GET /tasks', () => {
             .get('tasks')
             .expect(200)
             .expect(res => {
-                expect(res.body.length).to.be.eq(1);
+                expect(res.body.tasks.length).to.be.eq(1);
             })
             .end(done);
     });
@@ -24,7 +24,7 @@ describe('GET /tasks/{id}', () => {
             .get('tasks/0')
             .expect(200)
             .expect(res => {
-                expect(res.body.id).to.be.eq(0);
+                expect(res.body.task.id).to.be.eq(0);
             })
             .end(done);
     });
@@ -47,9 +47,9 @@ describe('POST /tasks', () => {
             })
             .expect(201)
             .expect(res => {
-                expect(res.body.title).to.be.eq('test');
-                expect(res.body.is_done).to.be.false;
-                id = res.body.id;
+                expect(res.body.task.title).to.be.eq('test');
+                expect(res.body.task.is_done).to.be.false;
+                id = res.body.task.id;
             })
             .end(done);
     });
@@ -76,7 +76,7 @@ describe('POST /tasks', () => {
             .get(`tasks/${id}`)
             .expect(200)
             .expect(res => {
-                expect(res.body.title).to.be.eq('test');
+                expect(res.body.task.title).to.be.eq('test');
             })
             .end(done);
     });
@@ -92,8 +92,8 @@ describe('PUT /tasks/{id}', () => {
             })
             .expect(200)
             .expect(res => {
-                expect(res.body.title).to.be.eq('updated');
-                expect(res.body.is_done).to.be.true;
+                expect(res.body.task.title).to.be.eq('updated');
+                expect(res.body.task.is_done).to.be.true;
             })
             .end(done);
     });

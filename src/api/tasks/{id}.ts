@@ -3,9 +3,9 @@ import Task from '../../models/Task';
 import * as api from '../../api';
 
 export const get: Operation = (req, res) => {
-    const task = Task.get(req.params.id);
-    if (task) {
-        api.responseJSON(res, 200, task);
+    const body = Task.get(req.params.id);
+    if (body.task) {
+        api.responseJSON(res, 200, body);
     } else {
         api.responseError(res, 404, '指定IDのタスクが見つかりませんでした');
     }
@@ -43,9 +43,9 @@ get.apiDoc = {
 };
 
 export const put: Operation = (req, res) => {
-    const task = Task.update(req.params.id, req.body);
-    if (task) {
-        api.responseJSON(res, 200, task);
+    const body = Task.update(req.params.id, req.body);
+    if (body.task) {
+        api.responseJSON(res, 200, body);
     } else {
         api.responseError(res, 400, 'タスクが更新できませんでした');
     }
@@ -90,8 +90,8 @@ put.apiDoc = {
 };
 
 export const del: Operation = (req, res) => {
-    const task = Task.delete(req.params.id);
-    if (task) {
+    const body = Task.delete(req.params.id);
+    if (body.task) {
         api.responseJSON(res, 200);
     } else {
         api.responseError(res, 400, 'タスクが削除できませんでした');

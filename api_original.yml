@@ -3,7 +3,8 @@ basePath: '/v1'
 info:
   version: "1.0"
   title: Todo Application API
-
+schemes:
+  - http
 consumes:
   - application/json
 produces:
@@ -15,31 +16,31 @@ paths:
       summary: タスク一覧の取得
       description: |
         タスク一覧を取得します
-      operationId: 'getTaskList'
+      operationId: getTaskList
       responses:
         200:
           description: タスク一覧を取得しました
           schema:
-            type: 'array'
+            type: array
             items:
               $ref: '#/definitions/TaskList'
         404:
-          description: 'タスク一覧が取得できませんでした'
+          description: タスク一覧が取得できませんでした
           schema: 
             $ref: '#/definitions/Error'
         default:
-          description: '予期しないエラー'
+          description: 予期しないエラー
           schema:
             $ref: '#/definitions/Error'
     post:
       summary: タスクの登録
       description: |
         タスクを登録します
-      operationId: 'createTask'
+      operationId: createTask
       parameters:
         -
-          name: 'task'
-          in: 'body'
+          name: task
+          in: body
           schema:
             $ref: '#/definitions/TaskOne'
       responses:
@@ -48,11 +49,11 @@ paths:
           schema:
             $ref: '#/definitions/TaskOne'
         400:
-          description: 'タスクが登録できませんでした'
+          description: タスクが登録できませんでした
           schema: 
             $ref: '#/definitions/Error'
         default:
-          description: '予期しないエラー'
+          description: 予期しないエラー
           schema:
             $ref: '#/definitions/Error'
   /tasks/{id}:
@@ -68,11 +69,11 @@ paths:
           schema:
             $ref: '#/definitions/TaskOne'
         404:
-          description: '指定IDのタスクが見つかりませんでした'
+          description: 指定IDのタスクが見つかりませんでした
           schema: 
             $ref: '#/definitions/Error'
         default:
-          description: '予期しないエラー'
+          description: 予期しないエラー
           schema:
             $ref: '#/definitions/Error'
     put:
@@ -82,8 +83,8 @@ paths:
       parameters:
         - $ref: '#/parameters/id'
         -
-          name: 'task'
-          in: 'body'
+          name: task
+          in: body
           schema:
             $ref: '#/definitions/TaskOne'
       responses:
@@ -92,11 +93,11 @@ paths:
           schema:
             $ref: '#/definitions/TaskOne'
         400:
-          description: 'タスクが更新できませんでした'
+          description: タスクが更新できませんでした
           schema: 
             $ref: '#/definitions/Error'
         default:
-          description: '予期しないエラー'
+          description: 予期しないエラー
           schema:
             $ref: '#/definitions/Error'
     delete:
@@ -109,11 +110,11 @@ paths:
         200:
           description: タスクを削除しました
         400:
-          description: 'タスクが削除できませんでした'
+          description: タスクが削除できませんでした
           schema: 
             $ref: '#/definitions/Error'
         default:
-          description: '予期しないエラー'
+          description: 予期しないエラー
           schema:
             $ref: '#/definitions/Error'
 
@@ -128,7 +129,7 @@ parameters:
 
 definitions:
   Error:
-    type: 'object'
+    type: object
     readOnly: true
     properties:
       code:
@@ -138,12 +139,9 @@ definitions:
       message:
         description: エラーメッセージ
         type: string
-  TaskList:
-    type: 'array'
-    items:
-      $ref: '#/definitions/TaskOne'
-  TaskOne:
-    type: 'object'
+  Task:
+    type: object
+    readOnly: true
     properties:
       id:
         description: タスクのID
@@ -156,4 +154,17 @@ definitions:
         description: タスクの状態
         default: false
         type: boolean
-    
+  TaskList:
+    type: object
+    readOnly: true
+    properties:
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/Task'
+  TaskOne:
+    type: object
+    readOnly: true
+    properties:
+      task:
+        $ref: '#/definitions/Task'

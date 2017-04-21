@@ -3,11 +3,15 @@ basePath: '/v1'
 info:
   version: "1.0"
   title: Todo Application API
+schemes:
+  - http
 consumes:
   - application/json
 produces:
   - application/json
+
 paths: {}
+
 parameters:
   id:
     description: タスクID
@@ -16,9 +20,10 @@ parameters:
     required: true
     type: integer
     format: int32
+
 definitions:
   Error:
-    type: 'object'
+    type: object
     readOnly: true
     properties:
       code:
@@ -28,14 +33,9 @@ definitions:
       message:
         description: エラーメッセージ
         type: string
-  TaskList:
-    type: 'array'
-    items:
-      $ref: '#/definitions/TaskOne'
-  TaskOne:
-    type: 'object'
-    required:
-      - title
+  Task:
+    type: object
+    readOnly: true
     properties:
       id:
         description: タスクのID
@@ -48,4 +48,17 @@ definitions:
         description: タスクの状態
         default: false
         type: boolean
-    
+  TaskList:
+    type: object
+    readOnly: true
+    properties:
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/Task'
+  TaskOne:
+    type: object
+    readOnly: true
+    properties:
+      task:
+        $ref: '#/definitions/Task'

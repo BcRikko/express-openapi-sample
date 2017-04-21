@@ -7,19 +7,32 @@ export interface ITask {
     is_done?: boolean
 }
 
+export interface ITaskOne {
+    task: ITask
+}
+
+export interface ITaskList {
+    tasks: ITask[]
+}
+
 export default class Task {
     constructor () {
     }
 
-    static all(): ITask[] {
-        return store.tasks;
+    static all(): ITaskList {
+        return {
+            tasks: store.tasks
+        };
     }
 
-    static get(id: number): ITask {
-        return store.tasks.find(a => a.id === id);
+    static get(id: number): ITaskOne {
+        const task = store.tasks.find(a => a.id === id);
+        return {
+            task: task
+        };
     }
 
-    static add(param: ITask): ITask {
+    static add(param: ITask): ITaskOne {
         const task: ITask = {
             id: store.counter++,
             title: param.title,
@@ -27,10 +40,12 @@ export default class Task {
         };
 
         store.tasks.push(task);
-        return task;
+        return {
+            task: task
+        };
     }
 
-    static update(id: number, param: ITask): ITask {
+    static update(id: number, param: ITask): ITaskOne {
         const index = store.tasks.findIndex(a => a.id === id);
         const self = store.tasks[index];
         const task: ITask = {
@@ -40,15 +55,22 @@ export default class Task {
         };
 
         store.tasks.splice(index, 1, task);
-        return task;
+        return {
+            task: task
+        };
     }
 
-    static delete(id: number): ITask {
+    static delete(id: number): ITaskOne {
         const index = store.tasks.findIndex(a => a.id === id);
         if (index > -1) {
-            return store.tasks.splice(index, 1)[0];
+            const task = store.tasks.splice(index, 1)[0];
+            return {
+                task: task
+            };
         }
 
-        return null;
+        return {
+            task: null
+        };
     }
 }
