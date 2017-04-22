@@ -45,7 +45,7 @@ describe('GET /tasks/{id}', () => {
             .end(done);
     });
 
-    it('存在しないタスクはNot Foundエラーになるか？', done => {
+    it('存在しないタスクはNot Foundになるか？', done => {
         agent
             .get('tasks/999')
             .expect(404)
@@ -124,17 +124,24 @@ describe('PUT /tasks/{id}', () => {
             .expect(400)
             .end(done);
     });
+
+    it('存在しないタスクはNot Foundになるか？', done => {
+        agent
+            .put('tasks/999')
+            .expect(404)
+            .end(done);
+    });
 });
 
 describe('DELETE /tasks/{id}', () => {
-    it('正常: タスクを削除できるか？', done => {
+    it('タスクを削除できるか？', done => {
         agent
             .delete('tasks/0')
             .expect(200)
             .end(done);
     });
 
-    it('異常: タスクを削除できるか？', done => {
+    it('存在しないタスクはNot Foundになるか？', done => {
         agent
             .delete('tasks/999')
             .expect(404)

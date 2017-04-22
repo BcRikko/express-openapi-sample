@@ -37,37 +37,42 @@ export default class Task {
         const offset = query.offset || 0;
 
         return new Promise((resolve, reject) => {
-            if (query.limit) {
-                tasks = store.tasks.slice(offset, offset + query.limit);
-            } else {
-                tasks = store.tasks.slice(offset);
-            }
-
             setTimeout(() => {
-                resolve({
-                    tasks: tasks,
-                    total: tasks.length,
-                    offset: offset
-                });
+                if (query.limit) {
+                    tasks = store.tasks.slice(offset, offset + query.limit);
+                } else {
+                    tasks = store.tasks.slice(offset);
+                }
+
+                if (tasks.length > 0) {
+                    resolve({
+                        tasks: tasks,
+                        total: tasks.length,
+                        offset: offset
+                    });
+                } else {
+                    reject(<IError>{
+                        code: 404,
+                        message: '指定IDのタスクが見つかりませんでした'
+                    });
+                }
             }, 100);
         });
     }
 
     static get(id: number): Promise<ITaskOne> {
         return new Promise((resolve, reject) => {
-            const task = store.tasks.find(a => a.id === id);
-            if (task) {
-                setTimeout(() => {
+            setTimeout(() => {
+                const task = store.tasks.find(a => a.id === id);
+                if (task) {
                     resolve({ task: task });
-                }, 100);
-            } else {
-                setTimeout(() => {
+                } else {
                     reject(<IError>{
                         code: 404,
                         message: '指定IDのタスクが見つかりませんでした'
                     });
-                }, 100);
-            }
+                }
+            }, 100);
         });
     }
 
@@ -79,8 +84,8 @@ export default class Task {
         };
 
         return new Promise((resolve, reject) => {
-            store.tasks.push(task);
             setTimeout(() => {
+                store.tasks.push(task);
                 resolve({ task: task });
             }, 100);
         });
@@ -88,26 +93,24 @@ export default class Task {
 
     static update(id: number, param: ITask): Promise<ITaskOne> {
         return new Promise((resolve, reject) => {
-            const index = store.tasks.findIndex(a => a.id === id);
-            if (index < 0) {
-                setTimeout(() => {
+            setTimeout(() => {
+                const index = store.tasks.findIndex(a => a.id === id);
+                if (index < 0) {
                     reject(<IError>{
                         code: 404,
                         message: '指定IDのタスクが見つかりませんでした'
                     });
-                }, 100);
-            }
+                    return;
+                }
 
-            const self = store.tasks[index];
-            const task: ITask = {
-                id: self.id,
-                title: param.title || self.title,
-                is_done: param.is_done || self.is_done
-            };
+                const self = store.tasks[index];
+                const task: ITask = {
+                    id: self.id,
+                    title: param.title || self.title,
+                    is_done: param.is_done || self.is_done
+                };
 
-            store.tasks.splice(index, 1, task);
-
-            setTimeout(() => {
+                store.tasks.splice(index, 1, task);
                 resolve({ task: task });
             }, 100);
         });
@@ -115,16 +118,19 @@ export default class Task {
 
     static delete(id: number): Promise<ITaskOne> {
         return new Promise((resolve, reject) => {
-            const index = store.tasks.findIndex(a => a.id === id);
-            if (index < 0) {
-                reject(<IError>{
-                    code: 404,
-                    message: '指定IDのタスクが見つかりませんでした'
-                });
-            }
-            
-            const task = store.tasks.splice(index, 1)[0];
-            resolve({ task: task });
+            setTimeout(() => {
+                const index = store.tasks.findIndex(a => a.id === id);
+                if (index < 0) {
+                    reject(<IError>{
+                        code: 404,
+                        message: '指定IDのタスクが見つかりませんでした'
+                    });
+                    return;
+                }
+
+                const task = store.tasks.splice(index, 1)[0];
+                resolve({ task: task });
+            }, 100);
         });
     }
 }
