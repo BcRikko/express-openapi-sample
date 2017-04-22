@@ -11,21 +11,24 @@ class Server {
 
     constructor () {
         const api = yaml.safeLoad(fs.readFileSync('api.yml', 'utf-8'));
-        
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(bodyParser.json());
 
         openapi.initialize({
             app: this.app,
             apiDoc: api,
             paths: './server/api',
+            docsPath: '/schema',
+            consumesMiddleware: {
+                'application/json': bodyParser.json(),
+                'text/text': bodyParser.text()
+            },
             errorMiddleware: (err, req, res, next) => {
                 res.status(400);
                 res.json(err);
             },
             errorTransformer: (openapi, jsonschema) => {
                 return openapi.message;
-            }
+            },
+            exposeApiDocs: true
         });
     }
 

@@ -155,3 +155,12 @@ describe('DELETE /tasks/{id}', () => {
             .end(done);
     });
 });
+
+describe('GET /schema', () => {
+    it('スキーマが取得できるか？', done => {
+        agent
+            .get('schema')
+            .expect(200)
+            .end(done);
+    });
+});
