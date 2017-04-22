@@ -3,15 +3,14 @@ import * as api from '../../api';
 import Task from '../../models/Task';
 import { ITaskOne } from '../../models/Task';
 
-export const get: Operation = (req, res) => {
-    Task
-        .get(req.params.id)
-        .then(body => {
-            api.responseJSON(res, 200, body);
-        })
-        .catch(err => {
-            api.responseError(res, err);
-        });
+export const get: Operation = async (req, res) => {
+    let task: ITaskOne;
+    try {
+        task = await Task.get(req.params.id);
+    } catch (err) {
+        api.responseError(res, err);
+    }
+    api.responseJSON(res, 200, task);
 };
 
 get.apiDoc = {
@@ -45,15 +44,14 @@ get.apiDoc = {
     }
 };
 
-export const put: Operation = (req, res) => {
-    Task
-        .update(req.params.id, req.body)
-        .then(body => {
-            api.responseJSON(res, 200, body);
-        })
-        .catch(err => {
-            api.responseError(res, err);
-        });
+export const put: Operation = async (req, res) => {
+    let task: ITaskOne;
+    try {
+        task = await Task.update(req.params.id, req.body);
+    } catch (err) {
+        api.responseError(res, err);
+    }
+    api.responseJSON(res, 200, task);
 };
 
 put.apiDoc = {
@@ -94,15 +92,14 @@ put.apiDoc = {
     }
 };
 
-export const del: Operation = (req, res) => {
-    Task
-        .delete(req.params.id)
-        .then(body => {
-            api.responseJSON(res, 200, body);
-        })
-        .catch(err => {
-            api.responseError(res, err);
-        });
+export const del: Operation = async (req, res) => {
+    let task: ITaskOne;
+    try {
+        task = await Task.delete(req.params.id);
+    } catch (err) {
+        api.responseError(res, err);
+    }
+    api.responseJSON(res, 200, task);        
 };
 
 del.apiDoc = {

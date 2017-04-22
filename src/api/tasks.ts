@@ -1,17 +1,16 @@
 import { Operation } from 'express-openapi';
 import * as api from '../api';
 import Task from '../models/Task';
-import { ITaskList, ITaskOne } from '../models/Task';
+import { ITaskListResponse, ITaskList, ITaskOne } from '../models/Task';
 
-export const get: Operation = (req, res) => {
-    Task
-        .all(req.query)
-        .then(body => {
-            api.responseJSON(res, 200, body);
-        })
-        .catch(err => {
-            api.responseError(res, err);
-        });
+export const get: Operation = async (req, res) => {
+    let tasks: ITaskListResponse;
+    try {
+        tasks = await Task.all(req.query);
+    } catch (err) {
+        api.responseError(res, err);
+    }
+    api.responseJSON(res, 200, tasks);
 };
 
 get.apiDoc = {
@@ -47,15 +46,14 @@ get.apiDoc = {
     }
 };
 
-export const post: Operation = (req, res) => {
-    Task
-        .add(req.body)
-        .then(body => {
-            api.responseJSON(res, 201, body);
-        })
-        .catch(err => {
-            api.responseError(res, err);
-        });
+export const post: Operation = async (req, res) => {
+    let task: ITaskOne;
+    try {
+        task = await Task.add(req.body);
+    } catch (err) {
+        api.responseError(res, err);
+    }
+    api.responseJSON(res, 201, task);
 };
 
 post.apiDoc = {
