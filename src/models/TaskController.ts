@@ -35,8 +35,10 @@ export default class TaskController {
         let tasks: Task[];
 
         return new Promise(async (resolve, reject) => {
+            const store = new Store();
+
             try {
-                conn = await Store.createConnection();
+                conn = await store.createConnection();
                 tasks = await conn.entityManager.find(Task, {
                     alias: 'task',
                     offset: offset,
@@ -50,24 +52,33 @@ export default class TaskController {
                 });
 
             } finally {
-                conn && conn.isConnected ? conn.close() : null;
+                store.close();
             }
 
-            resolve({
-                tasks: tasks,
-                total: tasks.length,
-                offset: offset
-            });
+            if (tasks) {
+                resolve({
+                    tasks: tasks,
+                    total: tasks.length,
+                    offset: offset
+                });
+            } else {
+                reject({
+                    code: 404,
+                    message: 'タスクが見つかりませんでした'
+                });
+            }
         });
     }
 
     static get(id: number): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
+            const store = new Store();
+
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await Store.createConnection();
+                conn = await store.createConnection();
                 result = await conn.entityManager.findOneById(Task, id);
 
             } catch (err) {
@@ -77,7 +88,7 @@ export default class TaskController {
                 });
 
             } finally {
-                conn && conn.isConnected ? conn.close() : null;
+                store.close();
             }
 
             if (result) {
@@ -93,6 +104,8 @@ export default class TaskController {
 
     static add(param: ITask): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
+            const store = new Store();
+
             let conn: Connection;
             let result: Task;
 
@@ -101,7 +114,7 @@ export default class TaskController {
             task.is_done = param.is_done || false;
 
             try {
-                conn = await Store.createConnection();
+                conn = await store.createConnection();
                 result = await conn.entityManager.persist(task);
 
             } catch (err) {
@@ -111,7 +124,7 @@ export default class TaskController {
                 });
 
             } finally {
-                conn && conn.isConnected ? conn.close() : null;
+                store.close();
             }
 
             resolve({ task: result });
@@ -120,11 +133,13 @@ export default class TaskController {
 
     static update(id: number, param: ITask): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
+            const store = new Store();
+
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await Store.createConnection();
+                conn = await store.createConnection();
                 const repository = await conn.getRepository(Task);
                 const task = await repository.findOneById(id);
 
@@ -147,7 +162,7 @@ export default class TaskController {
                 });
 
             } finally {
-                conn && conn.isConnected ? conn.close() : null;
+                store.close();
             }
 
             resolve({ task: result });
@@ -156,11 +171,13 @@ export default class TaskController {
 
     static delete(id: number): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
+            const store = new Store();
+
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await Store.createConnection();
+                conn = await store.createConnection();
                 const repository = await conn.getRepository(Task);
                 result = await repository.findOneById(id);
 
@@ -180,7 +197,7 @@ export default class TaskController {
                 });
 
             } finally {
-                conn && conn.isConnected ? conn.close() : null;
+                store.close();
             }
 
             resolve({ task: result });

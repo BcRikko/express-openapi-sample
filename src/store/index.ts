@@ -2,7 +2,9 @@ import { createConnection, ConnectionOptions, Connection } from 'typeorm';
 import Task from '../models/Task';
 
 export default class Store {
-    public static storeOptions: ConnectionOptions = {
+    private _conn: Connection;
+
+    public storeOptions: ConnectionOptions = {
         driver: {
             type: 'sqlite',
             storage: 'server/tasks.db',
@@ -17,7 +19,20 @@ export default class Store {
     constructor () {
     }
 
-    public static async createConnection () {
-        return await createConnection(this.storeOptions);
+    private isConnected () {
+        return this._conn && this._conn.isConnected;
+    }
+
+    public async createConnection (): Promise<Connection> {
+        if (!this.isConnected()) {
+            this._conn = await createConnection(this.storeOptions);
+        }
+        return this._conn;
+    }
+
+    public close() {
+        if (this.isConnected()) {
+            this._conn.close();
+        }
     }
 }
