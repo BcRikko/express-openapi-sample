@@ -15,27 +15,12 @@ describe('GET /tasks', () => {
                     .post('http://localhost:10080/v1/tasks')
                     .send({ title: param.title, is_done: param.is_done })
                     .end((err, res) => {
-                        setTimeout(() => {
-                            resolve();
-                        }, 300);
+                        resolve();
                     });
             });
         };
 
-        // [
-        //     request({ title: 'dummy1', is_done: false }),
-        //     request({ title: 'dummy2', is_done: false }),
-        //     request({ title: 'dummy3', is_done: false }),
-        //     request({ title: 'dummy4', is_done: false }),
-        //     done
-        // ].reduce((prev, current, index, array) => {
-        //     if (current instanceof Promise) {
-        //         return prev.then(current);
-        //     } else {
-        //         current();
-        //     }
-        // }, Promise.resolve());
-
+        // sqlite3がロックされるので直列処理
         Promise.resolve()
             .then(() => { return request({ title: 'dummy1', is_done: false }); })
             .then(() => { return request({ title: 'dummy2', is_done: false }); })

@@ -31,12 +31,11 @@ export default class TaskController {
     static all(query: IParameters): Promise<ITaskListResponse> {
 
         return new Promise(async (resolve, reject) => {
-            const store = new Store();
             let conn: Connection;
             let tasks: Task[];
 
             try {
-                conn = await store.createConnection();
+                conn = await Store.createConnection();
                 tasks = await conn.entityManager.find(Task, {
                     alias: 'task',
                     offset: query.offset || 0,
@@ -46,8 +45,6 @@ export default class TaskController {
             } catch (err) {
                 reject({ code: 500, message: err.message });
 
-            } finally {
-                store.close();
             }
 
             if (tasks) {
@@ -67,20 +64,16 @@ export default class TaskController {
 
     static get(id: number): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
-            const store = new Store();
-
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await store.createConnection();
+                conn = await Store.createConnection();
                 result = await conn.entityManager.findOneById(Task, id);
 
             } catch (err) {
                 reject({ code: 500, message: err.message });
 
-            } finally {
-                store.close();
             }
 
             if (result) {
@@ -96,8 +89,6 @@ export default class TaskController {
 
     static add(param: ITask): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
-            const store = new Store();
-
             let conn: Connection;
             let result: Task;
 
@@ -106,14 +97,12 @@ export default class TaskController {
             task.is_done = param.is_done || false;
 
             try {
-                conn = await store.createConnection();
+                conn = await Store.createConnection();
                 result = await conn.entityManager.persist(task);
 
             } catch (err) {
                 reject({ code: 500, message: err.message });
 
-            } finally {
-                store.close();
             }
 
             resolve({ task: result });
@@ -122,13 +111,11 @@ export default class TaskController {
 
     static update(id: number, param: ITask): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
-            const store = new Store();
-
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await store.createConnection();
+                conn = await Store.createConnection();
                 const repository = await conn.getRepository(Task);
                 const task = await repository.findOneById(id);
 
@@ -147,8 +134,6 @@ export default class TaskController {
             } catch (err) {
                 reject({ code: 500, message: err.message });
 
-            } finally {
-                store.close();
             }
 
             resolve({ task: result });
@@ -157,13 +142,11 @@ export default class TaskController {
 
     static delete(id: number): Promise<ITaskOne> {
         return new Promise(async (resolve, reject) => {
-            const store = new Store();
-
             let conn: Connection;
             let result: Task;
 
             try {
-                conn = await store.createConnection();
+                conn = await Store.createConnection();
                 const repository = await conn.getRepository(Task);
                 result = await repository.findOneById(id);
 
@@ -179,8 +162,6 @@ export default class TaskController {
             } catch (err) {
                 reject({ code: 500, message: err.message });
 
-            } finally {
-                store.close();
             }
 
             resolve({ task: result });
