@@ -19,7 +19,7 @@ export default class Store {
     constructor () {
     }
 
-    private isConnected () {
+    private isConnected (): boolean {
         return this._conn && this._conn.isConnected;
     }
 
@@ -30,7 +30,7 @@ export default class Store {
         return this._conn;
     }
 
-    public close() {
+    public close(): void {
         if (this.isConnected()) {
             this._conn.close();
         }

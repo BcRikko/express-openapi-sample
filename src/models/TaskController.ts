@@ -29,27 +29,22 @@ export default class TaskController {
     }
 
     static all(query: IParameters): Promise<ITaskListResponse> {
-        let conn: Connection;
-        const offset = query.offset || 0;
-        const limit = query.limit || 100;
-        let tasks: Task[];
 
         return new Promise(async (resolve, reject) => {
             const store = new Store();
+            let conn: Connection;
+            let tasks: Task[];
 
             try {
                 conn = await store.createConnection();
                 tasks = await conn.entityManager.find(Task, {
                     alias: 'task',
-                    offset: offset,
-                    limit: limit
+                    offset: query.offset || 0,
+                    limit: query.limit || 100
                 });
 
             } catch (err) {
-                reject({
-                    code: 500,
-                    message: err.message
-                });
+                reject({ code: 500, message: err.message });
 
             } finally {
                 store.close();
@@ -59,7 +54,7 @@ export default class TaskController {
                 resolve({
                     tasks: tasks,
                     total: tasks.length,
-                    offset: offset
+                    offset: query.offset || 0
                 });
             } else {
                 reject({
@@ -82,10 +77,7 @@ export default class TaskController {
                 result = await conn.entityManager.findOneById(Task, id);
 
             } catch (err) {
-                reject({
-                    code: 500,
-                    message: err.message
-                });
+                reject({ code: 500, message: err.message });
 
             } finally {
                 store.close();
@@ -118,10 +110,7 @@ export default class TaskController {
                 result = await conn.entityManager.persist(task);
 
             } catch (err) {
-                reject({
-                    code: 500,
-                    message: err.message
-                });
+                reject({ code: 500, message: err.message });
 
             } finally {
                 store.close();
@@ -156,10 +145,7 @@ export default class TaskController {
                 result = await repository.persist(task);
 
             } catch (err) {
-                reject({
-                    code: 500,
-                    message: err.message
-                });
+                reject({ code: 500, message: err.message });
 
             } finally {
                 store.close();
@@ -191,10 +177,7 @@ export default class TaskController {
                 result = await repository.remove(result);
 
             } catch (err) {
-                reject({
-                    code: 500,
-                    message: err.message
-                });
+                reject({ code: 500, message: err.message });
 
             } finally {
                 store.close();
