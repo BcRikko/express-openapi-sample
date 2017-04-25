@@ -3,7 +3,7 @@ import * as yaml from 'js-yaml';
 import * as express from 'express';
 import * as openapi from 'express-openapi';
 import * as bodyParser from 'body-parser';
-import Task from './models/Task';
+import Store from './store';
 
 class Server {
     port: number = process.env.PORT || 10080;
@@ -33,8 +33,9 @@ class Server {
     }
 
     start () {
-        new Task();
+        new Store();
         
+
         this.app.listen(this.port, () => {
             console.log(`listening on ${this.port}`);
         });

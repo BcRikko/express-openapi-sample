@@ -1,44 +1,23 @@
-import { ITask } from '../models/Task';
+import { createConnection, ConnectionOptions, Connection } from 'typeorm';
+import Task from '../models/Task';
 
-class Store {
-    private static _instance: Store;
-    private constructor() {}
+export default class Store {
+    public static storeOptions: ConnectionOptions = {
+        driver: {
+            type: 'sqlite',
+            storage: 'server/tasks.db',
+            database: 'Tasks'
+        },
+        entities: [
+            Task
+        ],
+        autoSchemaSync: true
+    };
 
-    public counter = 5;
-    public tasks:ITask[] = [
-        {
-            id: 0,
-            title: 'dummy0',
-            is_done: false
-        },
-        {
-            id: 1,
-            title: 'dummy1',
-            is_done: false
-        },
-        {
-            id: 2,
-            title: 'dummy2',
-            is_done: false
-        },
-        {
-            id: 3,
-            title: 'dummy3',
-            is_done: false
-        },
-        {
-            id: 4,
-            title: 'dummy4',
-            is_done: false
-        }
-    ];
+    constructor () {
+    }
 
-    public static get instance(): Store {
-        if (!this._instance) {
-            this._instance = new Store();
-        }
-        return this._instance;
+    public static async createConnection () {
+        return await createConnection(this.storeOptions);
     }
 }
-
-export default Store;

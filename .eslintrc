@@ -11,7 +11,8 @@
     "globals": {
         "describe": false,
         "it": false,
-        "before": false
+        "before": false,
+        "after": false
     },
     "extends": "eslint:recommended",
     "rules": {

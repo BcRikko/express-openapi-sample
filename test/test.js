@@ -1,5 +1,6 @@
-const request = require('supertest');
 const expect = require('chai').expect;
+const request = require('supertest');
+const superagent = require('superagent');
 const agent = request.agent('http://localhost:10080/v1/');
 const Server = require('../server/Server');
 
@@ -7,6 +8,43 @@ const server = new Server.default();
 server.start();
 
 describe('GET /tasks', () => {
+    before(done => {
+        const request = param => {
+            return new Promise(resolve => {
+                superagent
+                    .post('http://localhost:10080/v1/tasks')
+                    .send({ title: param.title, is_done: param.is_done })
+                    .end((err, res) => {
+                        setTimeout(() => {
+                            resolve();
+                        }, 300);
+                    });
+            });
+        };
+
+        // [
+        //     request({ title: 'dummy1', is_done: false }),
+        //     request({ title: 'dummy2', is_done: false }),
+        //     request({ title: 'dummy3', is_done: false }),
+        //     request({ title: 'dummy4', is_done: false }),
+        //     done
+        // ].reduce((prev, current, index, array) => {
+        //     if (current instanceof Promise) {
+        //         return prev.then(current);
+        //     } else {
+        //         current();
+        //     }
+        // }, Promise.resolve());
+
+        Promise.resolve()
+            .then(() => { return request({ title: 'dummy1', is_done: false }); })
+            .then(() => { return request({ title: 'dummy2', is_done: false }); })
+            .then(() => { return request({ title: 'dummy3', is_done: false }); })
+            .then(() => { return request({ title: 'dummy4', is_done: false }); })
+            .then(() => { return request({ title: 'dummy5', is_done: false }); })
+            .then(() => { done(); });
+    });
+
     it('ダミーデータが取得できるか？', done => {
         agent
             .get('tasks')
@@ -37,10 +75,10 @@ describe('GET /tasks', () => {
 describe('GET /tasks/{id}', () => {
     it('ID指定でダミーデータが取得できるか？', done => {
         agent
-            .get('tasks/0')
+            .get('tasks/1')
             .expect(200)
             .expect(res => {
-                expect(res.body.task.id).to.be.eq(0);
+                expect(res.body.task.id).to.be.eq(1);
             })
             .end(done);
     });
@@ -101,7 +139,7 @@ describe('POST /tasks', () => {
 describe('PUT /tasks/{id}', () => {
     it('タスクを更新できるか？', done => {
         agent
-            .put('tasks/0')
+            .put('tasks/1')
             .send({
                 title: 'updated',
                 is_done: true
@@ -116,7 +154,7 @@ describe('PUT /tasks/{id}', () => {
 
     it('型が違う場合はBad Requestになるか？', done => {
         agent
-            .put('tasks/0')
+            .put('tasks/1')
             .send({
                 title: 'updated',
                 is_done: 'true'
@@ -136,7 +174,7 @@ describe('PUT /tasks/{id}', () => {
 describe('DELETE /tasks/{id}', () => {
     it('タスクを削除できるか？', done => {
         agent
-            .delete('tasks/0')
+            .delete('tasks/1')
             .expect(200)
             .end(done);
     });
@@ -150,7 +188,7 @@ describe('DELETE /tasks/{id}', () => {
 
     it('タスクがちゃんと消えているか？', done => {
         agent
-            .get('tasks/0')
+            .get('tasks/1')
             .expect(404)
             .end(done);
     });

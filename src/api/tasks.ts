@@ -1,7 +1,7 @@
 import { Operation } from 'express-openapi';
 import * as api from '../api';
-import Task from '../models/Task';
-import { ITaskListResponse, ITaskList, ITaskOne } from '../models/Task';
+import Task from '../models/TaskController';
+import { ITaskListResponse, ITaskList, ITaskOne } from '../models/TaskController';
 
 export const get: Operation = async (req, res) => {
     let tasks: ITaskListResponse;
